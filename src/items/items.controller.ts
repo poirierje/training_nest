@@ -1,8 +1,7 @@
 import { Controller, Get, Post, Delete, Body, Param, Put } from '@nestjs/common';
-import { identity } from 'rxjs';
-import { CreateItemDto } from './dto/create-item.dto';
+import { ItemDTO } from './dto/item.dto';
+import { Item } from './interfaces/item.interface';
 import { ItemsService } from './items.service';
-import { Item } from './schemas/item.schema'
 
 @Controller('items')
 export class ItemsController {
@@ -23,8 +22,8 @@ export class ItemsController {
     }
 
     @Post()
-    create(@Body() createItemDto: CreateItemDto): Promise<Item> {
-        return this.itemsService.create(createItemDto);
+    create(@Body() itemDto: ItemDTO): Promise<Item> {
+        return this.itemsService.create(itemDto);
     }
 
     @Delete('delete/:id')
@@ -33,7 +32,7 @@ export class ItemsController {
     }
 
     @Put('modify/:id')
-    update(@Body() updateItemDto: CreateItemDto, @Param('id') id): string {
+    update(@Body() updateItemDto: ItemDTO, @Param('id') id): string {
         return `Update item #${id} with :
         - Name: ${updateItemDto.name} 
         - Desc: ${updateItemDto.description}`;
