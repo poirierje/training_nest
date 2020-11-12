@@ -25,5 +25,6 @@ export class AppModule {
     consumer
       .apply(ItemLoggerMiddleware)
       .forRoutes({ path: '/items/**', method: RequestMethod.ALL });
+
   }
 }
