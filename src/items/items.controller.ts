@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Delete, Body, Param, Put, UseFilters, ParseBoolPipe } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, Put, UseFilters, ParseBoolPipe, UsePipes } from '@nestjs/common';
 import { ItemDTO } from './dto/item.dto';
 import { NoSuchItemException } from './exceptions/nosuchitem.exception';
 import { NoSuchItemExceptionFilter } from './filters/nosuchitem.exception.filter';
 import { Item } from './interfaces/item.interface';
 import { ItemsService } from './items.service';
+import { ForceBoolToTruePipe } from './pipes/forcebooltotrue.pipe';
 
 @Controller('items')
 export class ItemsController {
@@ -17,8 +18,10 @@ export class ItemsController {
     // http://localhost:3000/items/findOne/14/true
     @Get('findOne/:id/:debug')
     @UseFilters(new NoSuchItemExceptionFilter())
-    async find(@Param() param, @Param('debug', ParseBoolPipe) debug): Promise<Item> {
-        if (debug === 'true') {
+    async find(@Param() param, @Param('debug', ParseBoolPipe, ForceBoolToTruePipe) debug): Promise<Item> {
+
+        console.log('Debug mode : ' + debug);
+        if (debug) {
             console.log('Activated debug mode');
         };
 
