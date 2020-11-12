@@ -1,5 +1,7 @@
-import { Controller, Get, Post, Delete, Body, Param, Put } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, Put, NotImplementedException, HttpException, HttpStatus, UseFilters } from '@nestjs/common';
 import { ItemDTO } from './dto/item.dto';
+import { NoSuchItemException } from './exceptions/nosuchitem.exception';
+import { NoSuchItemExceptionFilter } from './filters/nosuchitem.exception.filter';
 import { Item } from './interfaces/item.interface';
 import { ItemsService } from './items.service';
 
@@ -14,11 +16,24 @@ export class ItemsController {
 
     // http://localhost:3000/items/findOne/14/true
     @Get('findOne/:id/:debug')
+    @UseFilters(new NoSuchItemExceptionFilter())
     async find(@Param() param, @Param('debug') debug): Promise<Item> {
         if (debug === 'true') {
             console.log('Activated debug mode');
         };
-        return this.itemsService.findOne(param.id);
+
+        const item = this.itemsService.findOne(param.id);
+
+        return item
+            .then((item) => {
+                if (item)
+                    return item;
+                else
+                    throw new NoSuchItemException(param.id);
+            })
+            .catch((message) => {
+                throw new NoSuchItemException(param.id);
+            });
     }
 
     @Post()
