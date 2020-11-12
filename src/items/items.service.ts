@@ -1,12 +1,12 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Item, ItemDocument } from './schemas/item.schema';
-import { CreateItemDto } from './dto/create-item.dto';
+import { ItemDTO } from './dto/item.dto';
+import { Item } from './interfaces/item.interface';
 
 @Injectable()
 export class ItemsService {
-    constructor(@InjectModel(Item.name) private readonly itemModel: Model<ItemDocument>) { }
+    constructor(@InjectModel('Item') private readonly itemModel: Model<Item>) { }
 
     async findAll(): Promise<Item[]> {
         return await this.itemModel.find().exec();
@@ -16,8 +16,8 @@ export class ItemsService {
         return await this.itemModel.findOne({ _id: id });
     }
 
-    async create(createItemDto: CreateItemDto): Promise<Item> {
-        const newItem = new this.itemModel(createItemDto);
+    async create(itemDto: ItemDTO): Promise<Item> {
+        const newItem = new this.itemModel(itemDto);
         return await newItem.save();
     }
 

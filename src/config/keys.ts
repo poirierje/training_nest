@@ -1,3 +1,3 @@
-export default {
-    mongoURI : 'mongodb+srv://abcd1234:abcd1234@cluster0.z7r0g.mongodb.net/<dbname>?retryWrites=true&w=majority'
-}
+export default () => ({
+    mongoURI: `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@${process.env.MONGO_DB_URL}/<dbname>?retryWrites=true&w=majority`
+});
