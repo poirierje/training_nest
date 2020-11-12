@@ -1,12 +1,15 @@
-import { Controller, Get, Post, Delete, Body, Param, Put, UseFilters, ParseBoolPipe, UsePipes } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, Put, UseFilters, ParseBoolPipe, UsePipes, UseGuards } from '@nestjs/common';
 import { ItemDTO } from './dto/item.dto';
 import { NoSuchItemException } from './exceptions/nosuchitem.exception';
 import { NoSuchItemExceptionFilter } from './filters/nosuchitem.exception.filter';
+import { AuthGuard } from './guards/auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 import { Item } from './interfaces/item.interface';
 import { ItemsService } from './items.service';
 import { ForceBoolToTruePipe } from './pipes/forcebooltotrue.pipe';
 
 @Controller('items')
+@UseGuards(AuthGuard, RolesGuard)
 export class ItemsController {
     constructor(private readonly itemsService: ItemsService) { }
 
