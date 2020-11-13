@@ -8,6 +8,13 @@ Basic NestJS + MongoDB app, in order to learn NestJS framework.
 
 ## Installation
 
+Needs an .env file at root folder, with following content :
+```bash
+MONGO_DB_URL=<url>
+MONGO_DB_USER=<user>
+MONGO_DB_PASSWORD=<passwd>
+```
+
 ```bash
 $ npm install
 ```
